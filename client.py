@@ -3,6 +3,7 @@
 """
 Basic usage example of the nesctrl module
 """
+from __future__ import print_function, division
 import nesctrl
 import sys
 nesctrl.setup(22, 17, 4)
@@ -31,8 +32,12 @@ try:
         for x in newState:
             if newState[x] != state[x]:
                 debug("changed x:", x)
+                sendMsg = x
+                if state[x]:
+                    sendMsg = sendMsg.lower()
+                debug("sendMsg:", sendMsg)
+                sock.sendto((sendMsg+'0').encode('utf-8'), server_address)
                 state[x] = newState[x]
-                sock.sendto((x+'0').encode('utf-8'), server_address)
 except KeyboardInterrupt:
     pass
 

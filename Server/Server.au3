@@ -7,7 +7,6 @@ Local $MaxLength = 50; Maximum Length Of String
 Local $Port = 5001; Port Number
 Local $Server = '0.0.0.0'; Server IpAddress
 Global $Buttons = ['B', 'Y', 'SELECT', 'START', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'A', 'X', 'L', 'R']
-Global $State = [False, False, False, False, False, False, False, False, False, False, False, False]
 Global $Key = ['B', 'Y', 'RSHIFT', 'ENTER', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'A', 'X', 'L', 'R']
 UDPStartup()
 OnAutoItExitRegister("OnAutoItExit")
@@ -19,17 +18,17 @@ While 1
         $Splitted = StringSplit($Data, '0')
         For $i = 1 To $Splitted[0]
             If $Splitted[$i] <> "" Then
-                $Index = _ArraySearch($Buttons, $Splitted[$i])
+                $Upper = StringUpper($Splitted[$i])
+                $Index = _ArraySearch($Buttons, $Upper)
                 If $Index = -1 Then
                     MsgBox(0, "title", $Data)
                     ContinueLoop
                 EndIf
-                If not $State[$Index] Then
+                If $Upper == $Splitted[$i] Then
                     Send("{" & $Key[$Index] & " DOWN}")
                 Else
                     Send("{" & $Key[$Index] & " UP}")
                 EndIf
-                $State[$Index] = not $State[$Index]
             EndIf
         Next
     EndIf
